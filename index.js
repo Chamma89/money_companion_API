@@ -12,15 +12,39 @@ const cn = {
     database: 'money_companion'
 }
 
+
 const db = pgp(cn)
 
+app.use(express.json());
+app.use(express.urlencoded({
+    extended: true
+}));
+
 app.get('/api/mc', (req, res) => {
-    return db.one('SELECT * FROM users')
-    .then(function (user) {
-        res.json({
-            user: user
+
+    // res.send('sdfsdf')
+    db.one('SELECT * FROM users where id = 4')
+        .then(function (data) {
+            res.json({ user: data })
         })
-    })
 })
+
+
+app.post('/api/mc/update', function(req, res){
+    var customerName = req.body.name;
+    var customerEmail = req.body.email;
+    var customerPhone = req.body.phone;
+    db.none('INSERT INTO users(name, email, phone) VALUES($1, $2, $3)', [customerName, customerEmail, customerPhone]
+    ).then(function(){
+        console.log('success')
+    })
+
+    res.send(customerName)
+})
+
+// db.any('select * from users where active = $1', [true])
+//     .then(data => {
+//         console.log('DATA:', data); // print data;
+//     })
 
 app.listen(PORT, () => console.log(`Server started on ${PORT}`))
