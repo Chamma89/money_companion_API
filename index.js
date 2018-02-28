@@ -23,7 +23,7 @@ app.use(express.urlencoded({
 app.get('/api/mc', (req, res) => {
 
     // res.send('sdfsdf')
-    db.one('SELECT * FROM users where id = 4')
+    db.one('SELECT * FROM savings ORDER BY ID DESC LIMIT 1')
         .then(function (data) {
             res.json({ user: data })
         })
@@ -31,15 +31,19 @@ app.get('/api/mc', (req, res) => {
 
 
 app.post('/api/mc/update', function(req, res){
-    var customerName = req.body.name;
-    var customerEmail = req.body.email;
-    var customerPhone = req.body.phone;
-    db.none('INSERT INTO users(name, email, phone) VALUES($1, $2, $3)', [customerName, customerEmail, customerPhone]
+    var currentbalance = req.body.currentbalance;
+    var income = req.body.income;
+    var closingbalance = req.body.closingbalance;
+    var month = req.body.month;
+    // debugger
+    var spending = (Number(closingbalance) - (Number(currentbalance) + Number(income)))
+    var saving = Number(spending) + Number(income)
+    db.none('INSERT INTO savings(currentbalance, income, closingbalance, spending, saving, month) VALUES($1, $2, $3, $4, $5, $6)', [currentbalance, income, closingbalance, spending, saving, month]
     ).then(function(){
         console.log('success')
     })
 
-    res.send(customerName)
+    res.send(closingbalance)
 })
 
 // db.any('select * from users where active = $1', [true])
