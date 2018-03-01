@@ -23,7 +23,7 @@ app.use(express.urlencoded({
 app.get('/api/mc', (req, res) => {
 
     // res.send('sdfsdf')
-    db.one('SELECT * FROM savings ORDER BY ID DESC LIMIT 1')
+    db.any('SELECT * FROM savings')
         .then(function (data) {
             res.json({ user: data })
         })
@@ -35,7 +35,7 @@ app.post('/api/mc/update', function(req, res){
     var income = req.body.income;
     var closingbalance = req.body.closingbalance;
     var month = req.body.month;
-    // debugger
+    // f
     var spending = (Number(closingbalance) - (Number(currentbalance) + Number(income)))
     var saving = Number(spending) + Number(income)
     db.none('INSERT INTO savings(currentbalance, income, closingbalance, spending, saving, month) VALUES($1, $2, $3, $4, $5, $6)', [currentbalance, income, closingbalance, spending, saving, month]
