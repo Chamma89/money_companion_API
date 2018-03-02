@@ -46,9 +46,4 @@ app.post('/api/mc/update', function(req, res){
     res.send(closingbalance)
 })
 
-// db.any('select * from users where active = $1', [true])
-//     .then(data => {
-//         console.log('DATA:', data); // print data;
-//     })
-
 app.listen(PORT, () => console.log(`Server started on ${PORT}`))
